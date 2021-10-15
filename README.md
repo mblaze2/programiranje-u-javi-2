@@ -77,6 +77,10 @@
 
 Links to usefull resources: 
 
+## Project themes
+
+- Snakes and Ladders ([Marijo](https://github.com/mblaze2))
+
 ## Code of conduct
 
 [AlgebraStudents code of conduct](https://github.com/AlgebraStudentCollab/code-of-conduct).
