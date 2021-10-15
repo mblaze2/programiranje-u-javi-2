@@ -79,7 +79,7 @@ Links to usefull resources:
 
 ## Code of conduct
 
-[AlgebraStudents code of conduct]([github:URL]).
+[AlgebraStudents code of conduct](https://github.com/AlgebraStudentCollab/code-of-conduct).
 
 ## Licence
 
