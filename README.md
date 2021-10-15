@@ -76,7 +76,6 @@
 ## Tutorials
 
 Links to usefull resources: 
-- 
 
 ## Code of conduct
 
