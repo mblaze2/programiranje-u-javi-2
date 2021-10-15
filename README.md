@@ -4,15 +4,15 @@
 		Programiranje u Javi 2 - 5. semestar - Algebra - Programsko Inžinjerstvo - 6 ECTS
 		<br />
 		<br />
-		<a href="https://github.com/AlgebraStudentCollab/java-2/issues">
+		<a href="https://github.com/AlgebraStudentCollab/programiranje-u-javi-2/issues">
 			Notes
 		</a>
 		<span> · </span>
-		<a href="https://github.com/AlgebraStudentCollab/java-2/issues">
+		<a href="https://github.com/AlgebraStudentCollab/programiranje-u-javi-2/issues">
 			Report Bug
 		</a>
 		<span> · </span>
-		<a  href="https://github.com/AlgebraStudentCollab/java-2/issues">
+		<a  href="https://github.com/AlgebraStudentCollab/programiranje-u-javi-2/issues">
 			Request Feature
 		</a>
 	</p>
