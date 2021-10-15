@@ -21,13 +21,13 @@
 <div align='center'>
 	<p align="center"><em>- Quick Links (login required) -</em></p>
 	<a href="https://student.racunarstvo.hr/digitalnareferada/#/predmet/3382">
-	<img src='https://img.shields.io/badge/infoeduka-blue?style=for-the-badge'>
+	<img src='https://img.shields.io/badge/course%20materials-blue?style=for-the-badge'>
 	</a>
 	<a  href="https://student.racunarstvo.hr/digitalnareferada/#/ocjene">
-	<img src='https://img.shields.io/badge/points-green?style=for-the-badge'>
+	<img src='https://img.shields.io/badge/grades-green?style=for-the-badge'>
 	</a>
 	<a  href="https://student.racunarstvo.hr/digitalnareferada/#/prisustva">
-	<img src='https://img.shields.io/badge/attendence-red?style=for-the-badge'>
+	<img src='https://img.shields.io/badge/presence-red?style=for-the-badge'>
 	</a>
 </div>
 
