@@ -46,11 +46,11 @@
 
 ## Deadlines
 
-18.10. - 24.10. 2021. I1, I2, I3
-08.11. - 14.11. 2021. I5
-13.12. - 19.12. 2021. I6
-10.01. - 16.01. 2022. I4 
-14 24.01. - 30.01. 2022. I7
+- 18.10. - 24.10. 2021. I1, I2, I3
+- 08.11. - 14.11. 2021. I5
+- 13.12. - 19.12. 2021. I6
+- 10.01. - 16.01. 2022. I4 
+- 14 24.01. - 30.01. 2022. I7
 
 
 ## Instalation
@@ -61,7 +61,16 @@
 
 ## Curriculum
 
-JavaFX • Reflection (Annotations, Factory Pattern) • Serialization • Networking • JNDI • RMI • XML • Generics • Threads • Enums (Strategy Pattern)
+- JavaFX 
+- Reflection (Annotations, Factory Pattern)
+- Serialization
+- Networking
+- JNDI
+- RMI
+- XML
+- Generics
+- Threads
+- Enums (Strategy Pattern)
 
 
 ## Tutorials
