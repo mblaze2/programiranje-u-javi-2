@@ -18,13 +18,13 @@
             </Label>
             <HBox alignment="CENTER" prefWidth="342.0" spacing="20.0">
                <children>
-                  <Button fx:id="btnSingleplayer" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Singleplayer" />
+                  <Button fx:id="btnSingleplayer" alignment="CENTER" mnemonicParsing="false" onAction="#btnSingleplayerClick" text="Singleplayer" />
                   <Button alignment="CENTER" disable="true" mnemonicParsing="false" text="Multiplayer" />
                </children>
             </HBox>
             <Button disable="true" mnemonicParsing="false" text="Score" />
             <Button disable="true" mnemonicParsing="false" text="Settings" />
-            <Button fx:id="btnQuit" mnemonicParsing="false" text="Quit" />
+            <Button fx:id="btnQuit" mnemonicParsing="false" onAction="#btnQuitClick" text="Quit" />
          </children>
       </VBox>
    </children>

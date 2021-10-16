@@ -1,6 +1,12 @@
+# Ignore custom folder
+
+Materials/
+
 # Ignore obsidian editor
 
 .obsidian/*.
+
+# Ignore NetBeans editor
 
 **/nbproject/private/
 **/nbproject/Makefile-*.mk

@@ -19,14 +19,15 @@ import javafx.stage.Stage;
 public class app extends Application {
     
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("view/Menu.fxml"));
 
         Scene scene = new Scene(root, 600, 400);
         
-        primaryStage.setTitle("Menu");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.setTitle("Snakes And Ladders");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
     }
 
     /**
