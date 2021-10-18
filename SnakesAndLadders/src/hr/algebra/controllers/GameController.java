@@ -25,7 +25,8 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-
+import javafx.scene.paint.Color;
+        
 /**
  * FXML Controller class
  *
@@ -37,13 +38,6 @@ public class GameController implements Initializable {
     private Button btnRoll;
     @FXML
     private GridPane gpGrid;
-    
-    Player player;    
-    Player computer;
-
-    private final List<Snake> Snakes;
-    private final List<Ladder> Ladders;
-    
     @FXML
     private Circle cP1;
     @FXML
@@ -59,132 +53,74 @@ public class GameController implements Initializable {
     @FXML
     private Label lblOpponentRolledNumber;
     @FXML
-    private ProgressIndicator piPlayer;
-    @FXML
-    private ProgressIndicator piOpponent;
-    @FXML
     private Label lblSnakeInfo;
     @FXML
     private Label lblLadderInfo;
+    @FXML
+    private ProgressIndicator piRolling;
+    
+    Player player;    
+    Player computer;
+
+    private final List<Snake> Snakes;
+    private final List<Ladder> Ladders;
 
     public GameController() {
         this.Snakes = new ArrayList<>();
         this.Ladders = new ArrayList<>();
-        
-        player = new Player(Paint.valueOf("#5ec4fe"));
-        computer = new Player(Paint.valueOf("#5ec4fe"));
     }
-            
+    
     /**
      * Initialises the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        initializePlayers();
+        initializeColors();
         initializeGameBoard();
     }    
 
+    private void initializePlayers() {
+        player = new Player(cP1, Paint.valueOf(Color.CADETBLUE.toString()));
+        computer = new Player(cP2, Paint.valueOf(Color.CORAL.toString()));
+    }
+    private void initializeColors() {
+        lblPlayerScore.setTextFill(player.getPaint());
+        lblOpponentScore.setTextFill(computer.getPaint());
+        lblPlayerRolledNumber.setTextFill(player.getPaint());
+        lblOpponentRolledNumber.setTextFill(computer.getPaint());
+    }
+
+    private void initializeGameBoard() {
+        
+        Snakes.add(new Snake(new Point(1,8), new Point(2,9)));        
+//        Snakes.add(new Snake(new Point(3,6), new Point(4,9)));
+//        Snakes.add(new Snake(new Point(7,6), new Point(8,9)));
+//        Snakes.add(new Snake(new Point(5,5), new Point(6,8)));
+//        Snakes.add(new Snake(new Point(0,1), new Point(3,8)));
+//        Snakes.add(new Snake(new Point(1,4), new Point(0,6)));
+//        Snakes.add(new Snake(new Point(7,2), new Point(0,9)));
+//        Snakes.add(new Snake(new Point(7,0), new Point(9,3)));
+//        Snakes.add(new Snake(new Point(4,0), new Point(5,3)));
+//        Snakes.add(new Snake(new Point(2,0), new Point(6,6)));
+//        
+//        Ladders.add(new Ladder(new Point(6,9), new Point(7,7)));
+//        Ladders.add(new Ladder(new Point(4,7), new Point(4,6)));
+//        Ladders.add(new Ladder(new Point(1,7), new Point(0,2)));
+//        Ladders.add(new Ladder(new Point(1,2), new Point(1,0)));
+//        Ladders.add(new Ladder(new Point(4,3), new Point(3,1)));
+//        Ladders.add(new Ladder(new Point(5,4), new Point(6,0)));
+        Ladders.add(new Ladder(new Point(8,5), new Point(8,0)));
+    }
+        
     @FXML
     private void btnRollClick(ActionEvent event) throws InterruptedException {
-
-        if(player.getWin() || computer.getWin()){
-            player.reset();
-            computer.reset();
-            updateEndMessage();
-            lblPlayerRolledNumber.setText("-");
-            lblOpponentRolledNumber.setText("-");
-            removeGridPanelChildren(cP1, cP2);
-            gpGrid.add(cP1,player.getLocation().x,player.getLocation().y);
-            gpGrid.add(cP2,computer.getLocation().x,computer.getLocation().y);
-            btnRoll.setText("Roll");
-            return;
-        }
-                
-        final int PlayerRolledNumber = Dice.roll();
-        final int OpponentRolledNumber = Dice.roll();
-        
-        new Thread() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    btnRoll.setDisable(true);
-                    lblPlayerRolledNumber.setText("");
-                    piPlayer.setVisible(true);
-                });
-                try {
-                    Thread.sleep(600);
-                }
-                catch(InterruptedException ex) {
-                }
-                Platform.runLater(() -> {
-                    
-                    lblOpponentRolledNumber.setText("");
-                    piOpponent.setVisible(true);
-
-                    removeGridPanelChildren(cP1);
-
-                    piPlayer.setVisible(false);
-                    lblPlayerRolledNumber.setText(String.valueOf(PlayerRolledNumber));
-                    
-                    player.setLocation((Point)validatePosition(getPlayerNextPosition(player, PlayerRolledNumber)).clone());
-                    gpGrid.add(cP1,player.getLocation().x,player.getLocation().y);
-                    setScore(player, lblPlayerScore);
-                });
-            }
-        }.start();
-        
-        new Thread() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    btnRoll.setDisable(true);
-                });
-                try {
-                    Thread.sleep(1200);
-                }
-                catch(InterruptedException ex) {
-                }
-                Platform.runLater(() -> {
-                    removeGridPanelChildren(cP2);
-
-                    btnRoll.setDisable(false);
-                    piOpponent.setVisible(false);
-                    lblOpponentRolledNumber.setText(String.valueOf(OpponentRolledNumber));
-                    
-                    computer.setLocation((Point)validatePosition(getPlayerNextPosition(computer, OpponentRolledNumber)).clone());
-                    gpGrid.add(cP2,computer.getLocation().x,computer.getLocation().y);
-                    setScore(computer, lblOpponentScore);
-
-                    if(player.getWin() || computer.getWin()){
-                       btnRoll.setText("Play Again!");
-                    }
-                    
-                    updateEndMessage();
-
-                });
-            }
-        }.start();
+        playRound();
     }
     
     private void removeGridPanelChildren(Node... nodes) {
         for(Node node : nodes) gpGrid.getChildren().remove(node);
     }
-
-    /*
-                0 1 2 3 4 5 6 7 8 9  X axis
-                _ _ _ _ _ _ _ _ _ _
-     Y      0 | X - win position
-            1 |
-     a      2 |         <--
-     x      3 |         -->
-     i      4 |         <--
-     s      5 |     --> FLOW -->
-            6 |         <--     
-            7 |          -->   
-            8 |         <--
-            9 | O - default starting position
-                                  
-
-    */
     
     private Point getPlayerNextPosition(Player p, int roll) {
         
@@ -230,89 +166,163 @@ public class GameController implements Initializable {
     private Point validatePosition(Point playerNextPosition) {
         for (Snake s : Snakes){
             if(s.getStartLocation().equals(playerNextPosition)){
-            new Thread() {
-                @Override
-                public void run() {
-                    Platform.runLater(() -> {
-                        lblSnakeInfo.setText("SNAKE!");
-                    });
-                    try {
-                        Thread.sleep(1200);
+                // Display Info
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> {
+                            lblSnakeInfo.setText("SNAKE!");
+                        });
+                        try {
+                            Thread.sleep(1200);
+                        }
+                        catch(InterruptedException ex) {
+                            System.out.println(ex.getMessage());
+                        }
+                        Platform.runLater(() -> {
+                            lblSnakeInfo.setText("");
+                        });
                     }
-                    catch(InterruptedException ex) {
-                    }
-                    Platform.runLater(() -> {
-                        lblSnakeInfo.setText("");
-                    });
-                }
-            }.start();
-               return  s.getEndLocation();
+                }.start();
+                return  s.getEndLocation();
             }
         }
         
         for (Ladder l : Ladders){
             if(l.getStartLocation().equals(playerNextPosition)){
+                // Display Info
                 new Thread() {
-                @Override
-                public void run() {
-                    Platform.runLater(() -> {
-                        lblLadderInfo.setText("LADDER!");
-                    });
-                    try {
-                        Thread.sleep(1200);
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> {
+                            lblLadderInfo.setText("LADDER!");
+                        });
+                        try {
+                            Thread.sleep(1200);
+                        }
+                        catch(InterruptedException ex) {
+                            System.out.println(ex.getMessage());
+                        }
+                        Platform.runLater(() -> {
+                            lblLadderInfo.setText("");
+                        });
                     }
-                    catch(InterruptedException ex) {
-                    }
-                    Platform.runLater(() -> {
-                        lblLadderInfo.setText("");
-                    });
-                }
-            }.start();
-               return l.getEndLocation();
+                }.start();
+                return l.getEndLocation();
             }
         }
                 
         return playerNextPosition;
     }
 
-    private void initializeGameBoard() {
-        Snakes.add(new Snake(new Point(1,8), new Point(2,9)));        
-        Snakes.add(new Snake(new Point(3,6), new Point(4,9)));
-        Snakes.add(new Snake(new Point(7,6), new Point(8,9)));
-        Snakes.add(new Snake(new Point(5,5), new Point(6,8)));
-        Snakes.add(new Snake(new Point(0,1), new Point(3,8)));
-        Snakes.add(new Snake(new Point(1,4), new Point(0,6)));
-        Snakes.add(new Snake(new Point(7,2), new Point(0,9)));
-        Snakes.add(new Snake(new Point(7,0), new Point(9,3)));
-        Snakes.add(new Snake(new Point(4,0), new Point(5,3)));
-        Snakes.add(new Snake(new Point(2,0), new Point(6,6)));
-        
-        Ladders.add(new Ladder(new Point(6,9), new Point(7,7)));
-        Ladders.add(new Ladder(new Point(4,7), new Point(4,6)));
-        Ladders.add(new Ladder(new Point(1,7), new Point(0,2)));
-        Ladders.add(new Ladder(new Point(1,2), new Point(1,0)));
-        Ladders.add(new Ladder(new Point(4,3), new Point(3,1)));
-        Ladders.add(new Ladder(new Point(5,4), new Point(6,0)));
-        Ladders.add(new Ladder(new Point(8,5), new Point(8,0)));
-    }
 
-    private void updateEndMessage() {
-        if(player.getWin()) lblEndMessage.setText("You Win!");
-        else if(computer.getWin()) lblEndMessage.setText("You Lose!");
-        else lblEndMessage.setText("");
+
+    private boolean checkWin() {
+        if(player.getWin()) {
+            btnRoll.setText("Play Again!");
+            lblEndMessage.setText("You Win!");
+            return true;
+        } else if(computer.getWin()) {
+            btnRoll.setText("Play Again!");
+            lblEndMessage.setText("You Lose!");
+            return true;
+        } else lblEndMessage.setText("");
+        return false;
     }
 
     private void setScore(Player p, Label lbl) {
         lbl.setText(String.valueOf(p.getScore()));
     }
-    
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
-            }
-        }
-        return null;
+
+    private void playRound() {
+        long deplayPerPlayer = 80;
+        
+        blockButton(deplayPerPlayer * 2);
+        spinProgress(deplayPerPlayer * 2);
+        updatePlayer(player, lblPlayerRolledNumber, lblPlayerScore, Dice.roll(), deplayPerPlayer);
+        updatePlayer(computer, lblOpponentRolledNumber, lblOpponentScore, Dice.roll(), deplayPerPlayer * 2);
+        
+
     }
-    
+
+    private void updatePlayer(Player p, Label lblRolled, Label lblScore, int roll, long sleep) {
+        // Run the player
+        new Thread() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    btnRoll.setDisable(true);
+                    lblRolled.setText("-");
+                    if(checkWin()) clearGame();
+                });
+                try {
+                    Thread.sleep(sleep);
+                }
+                catch(InterruptedException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                Platform.runLater(() -> {
+                    lblRolled.setText(String.valueOf(roll));
+                    p.setLocation((Point)validatePosition(getPlayerNextPosition(p, roll)).clone());
+
+                    // Remove the player form the grid then add it back to new location
+                    removeGridPanelChildren(p.getFigure());
+                    gpGrid.add(p.getFigure(),p.getLocation().x,p.getLocation().y);
+                    setScore(p, lblScore);
+                    checkWin();
+                });
+            }
+        }.start();
+    }
+
+    private void clearGame() {
+        player.reset();
+        computer.reset();
+        lblPlayerRolledNumber.setText("-");
+        lblOpponentRolledNumber.setText("-");
+        removeGridPanelChildren(cP1, cP2);
+        gpGrid.add(cP1,player.getLocation().x,player.getLocation().y);
+        gpGrid.add(cP2,computer.getLocation().x,computer.getLocation().y);
+        btnRoll.setText("Roll");
+    }
+
+    private void blockButton(long sleep) {
+        new Thread() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    btnRoll.setDisable(true);
+                });
+                try {
+                    Thread.sleep(sleep);
+                }
+                catch(InterruptedException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                Platform.runLater(() -> {
+                    btnRoll.setDisable(false);
+                });
+            }
+        }.start();
+    }
+
+    private void spinProgress(long sleep) {
+        new Thread() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    piRolling.setVisible(true);
+                });
+                try {
+                    Thread.sleep(sleep);
+                }
+                catch(InterruptedException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                Platform.runLater(() -> {
+                    piRolling.setVisible(false);
+                });
+            }
+        }.start();
+    }
 }

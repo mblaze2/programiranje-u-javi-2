@@ -62,18 +62,18 @@
             </Pane>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <center>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0" spacing="15.0" BorderPane.alignment="CENTER">
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
                      <children>
                         <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Label text="You: " textFill="#5ec4fe">
+                              <Label text="You: ">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="lblPlayerScore" text="0" textFill="#5ec4fe">
+                              <Label fx:id="lblPlayerScore" text="0">
                                  <font>
-                                    <Font size="24.0" />
+                                    <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
@@ -83,7 +83,6 @@
                         </HBox>
                         <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <ProgressIndicator fx:id="piPlayer" focusTraversable="false" prefHeight="30.0" prefWidth="30.0" visible="false" />
                               <Label fx:id="lblPlayerRolledNumber" textFill="#5ec4fe">
                                  <font>
                                     <Font name="System Bold" size="34.0" />
@@ -93,14 +92,14 @@
                         </HBox>
                         <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Label text="Opponent: " textFill="#da5e58">
+                              <Label text="Opponent: ">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="lblOpponentScore" text="0" textFill="#da5e58">
+                              <Label fx:id="lblOpponentScore" text="0">
                                  <font>
-                                    <Font size="24.0" />
+                                    <Font size="18.0" />
                                  </font>
                               </Label>
                            </children>
@@ -110,7 +109,6 @@
                         </HBox>
                         <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <ProgressIndicator fx:id="piOpponent" focusTraversable="false" prefHeight="30.0" prefWidth="30.0" visible="false" />
                               <Label fx:id="lblOpponentRolledNumber" textFill="#da5e58">
                                  <font>
                                     <Font name="System Bold" size="34.0" />
@@ -118,6 +116,7 @@
                               </Label>
                            </children>
                         </HBox>
+                        <ProgressIndicator fx:id="piRolling" focusTraversable="false" prefHeight="30.0" prefWidth="30.0" visible="false" />
                      </children>
                   </VBox>
                </center>
@@ -125,25 +124,18 @@
                   <Insets />
                </HBox.margin>
                <padding>
-                  <Insets bottom="50.0" top="50.0" />
+                  <Insets bottom="50.0" />
                </padding>
                <bottom>
-                  <Button fx:id="btnRoll" mnemonicParsing="false" onAction="#btnRollClick" text="Roll" BorderPane.alignment="CENTER">
+                  <Button fx:id="btnRoll" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btnRollClick" text="Roll" BorderPane.alignment="CENTER">
                      <font>
-                        <Font size="28.0" />
+                        <Font size="18.0" />
                      </font>
                      <BorderPane.margin>
                         <Insets />
                      </BorderPane.margin>
                   </Button>
                </bottom>
-               <top>
-                  <Label text="SCORE" textFill="#5ec4fe" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </top>
             </BorderPane>
          </children>
       </HBox>

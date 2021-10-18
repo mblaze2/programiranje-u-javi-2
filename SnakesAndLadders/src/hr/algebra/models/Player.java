@@ -7,21 +7,28 @@ package hr.algebra.models;
 
 import java.awt.Point;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 
 /**
  *
  * @author Marijo
  */
 public class Player {
-    Paint paint;
-    Point location = new Point(0,9);
-    boolean win = false;
     
-    public Player(Paint color) {
-        this.paint = color;
+    private final Circle figure;
+    private final Paint paint;
+    private Point location;
+    private final boolean win;
+    
+    public Player(Circle c, Paint p) {
+        this.figure = c;
+        this.win = false;
+        this.location = new Point(0,9);
+        this.paint = p;
+        figure.setFill(p);
     }
 
-    public Paint getColor() {
+    public Paint getPaint() {
         return paint;
     }
 
@@ -29,9 +36,12 @@ public class Player {
         return location;
     }
     
+    public Circle getFigure() {
+        return figure;
+    }
+        
     public boolean getWin(){
-        if(location.equals(new Point())) return true;
-        else return false;
+        return location.equals(new Point());
     }
     
     public void reset(){
