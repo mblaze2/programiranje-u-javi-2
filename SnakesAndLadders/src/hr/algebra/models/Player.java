@@ -6,6 +6,12 @@
 package hr.algebra.models;
 
 import java.awt.Point;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -15,53 +21,70 @@ import javafx.scene.shape.Circle;
  */
 public class Player {
     
-    private final Circle figure;
-    private final Paint paint;
-    private Point location;
-    private final boolean win;
+    private static final Point DEFAULT_LOCATION = new Point(0,9);
     
-    public Player(Circle c, Paint p) {
-        this.figure = c;
-        this.win = false;
-        this.location = new Point(0,9);
-        this.paint = p;
-        figure.setFill(p);
+    private final StringProperty nickname;
+    private final ObjectProperty<Circle> figure;
+    private final ObjectProperty<Paint> paint;
+    private final ObjectProperty<Point> location;
+    
+    private final IntegerProperty score = new SimpleIntegerProperty(0);
+    
+    public Player(String n, Circle c, Paint p) {
+        this.nickname = new SimpleStringProperty(n);
+        this.figure = new SimpleObjectProperty<>(c);
+        this.paint = new SimpleObjectProperty<>(p);
+        this.location = new SimpleObjectProperty<>(DEFAULT_LOCATION);
+        figure.get().setFill(p);
+    }
+
+    public String getNickname() {
+        return nickname.get();
     }
 
     public Paint getPaint() {
-        return paint;
+        return paint.get();
     }
 
     public Point getLocation() {
-        return location;
+        return location.get();
     }
     
     public Circle getFigure() {
-        return figure;
+        return figure.get();
     }
         
     public boolean getWin(){
-        return location.equals(new Point());
+        return location.get().equals(new Point());
     }
     
     public void reset(){
-        location = new Point(0,9);
+        location.set(new Point(0,9));
     }
 
     public void setLocation(Point location) {
-        this.location = location;
+        this.location.set(location);
+    }
+    
+    private void setScore(int score){
+        this.score.set(score);
     }
     
     public int getScore(){
-        boolean rollRight = location.getLocation().y % 2 != 0;
-        int columnScore = (9 - location.getLocation().y) * 10;
-        int rowScore = rollRight ? (location.getLocation().x + 1) : (10 - location.getLocation().x);
-        return columnScore + rowScore;
+        setScore(calculateScore());
+        return this.score.get();
     }
 
     @Override
     public String toString() {
-        return "Player{" + "location=" + location + '}';
+        return "Player {" + "location=" + location + '}';
+    }
+
+    private int calculateScore() {
+        boolean rollRight = location.get().getLocation().y % 2 != 0;
+        int columnScore = (9 - location.get().getLocation().y) * 10;
+        int rowScore = rollRight ? (location.get().getLocation().x + 1) : (10 - location.get().getLocation().x);
+        return columnScore + rowScore;
     }
     
     

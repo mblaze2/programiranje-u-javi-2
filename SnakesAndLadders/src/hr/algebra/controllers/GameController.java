@@ -9,6 +9,7 @@ import hr.algebra.models.Ladder;
 import hr.algebra.utils.Dice;
 import hr.algebra.models.Player;
 import hr.algebra.models.Snake;
+import hr.algebra.repository.Repository;
 import java.awt.Point;
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,9 +20,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -34,28 +41,31 @@ import javafx.scene.paint.Color;
  */
 public class GameController implements Initializable {
 
+    // Buttons
     @FXML
     private Button btnRoll;
     @FXML
     private GridPane gpGrid;
+    
+    // Shapes
     @FXML
-    private Circle cP1;
-    @FXML
-    private Circle cP2;
+    private Circle cP1, cP2;
+    
+    // Labels
     @FXML
     private Label lblEndMessage;
     @FXML
-    private Label lblPlayerScore;
+    private Label lblPlayerScore, lblOpponentScore;
     @FXML
-    private Label lblOpponentScore;
+    private Label lblPlayerRolledNumber, lblOpponentRolledNumber;
     @FXML
-    private Label lblPlayerRolledNumber;
+    private Label lblSnakeInfo, lblLadderInfo;
+    
+    // Menu items
     @FXML
-    private Label lblOpponentRolledNumber;
-    @FXML
-    private Label lblSnakeInfo;
-    @FXML
-    private Label lblLadderInfo;
+    private MenuItem miReset;
+    
+    // Other
     @FXML
     private ProgressIndicator piRolling;
     
@@ -64,6 +74,11 @@ public class GameController implements Initializable {
 
     private final List<Snake> Snakes;
     private final List<Ladder> Ladders;
+    @FXML
+    private TableView<Player> tvPlayers;
+    @FXML
+    private TableColumn<Player, String> tcColor, tcScore, tcNick;
+
 
     public GameController() {
         this.Snakes = new ArrayList<>();
@@ -78,11 +93,21 @@ public class GameController implements Initializable {
         initializePlayers();
         initializeColors();
         initializeGameBoard();
+        
+        // table
+        initTableCells();
+        initObservables();
     }    
 
     private void initializePlayers() {
-        player = new Player(cP1, Paint.valueOf(Color.CADETBLUE.toString()));
-        computer = new Player(cP2, Paint.valueOf(Color.CORAL.toString()));
+        
+        Repository.addPlayer(new Player("You", cP1, Paint.valueOf(Color.CADETBLUE.toString())));
+        Repository.addPlayer(new Player("Computer" ,cP2, Paint.valueOf(Color.CORAL.toString())));
+        
+        
+        this.player = Repository.getPlayer("You");
+        this.computer = Repository.getPlayer("Computer");
+
     }
     private void initializeColors() {
         lblPlayerScore.setTextFill(player.getPaint());
@@ -94,28 +119,39 @@ public class GameController implements Initializable {
     private void initializeGameBoard() {
         
         Snakes.add(new Snake(new Point(1,8), new Point(2,9)));        
-//        Snakes.add(new Snake(new Point(3,6), new Point(4,9)));
-//        Snakes.add(new Snake(new Point(7,6), new Point(8,9)));
-//        Snakes.add(new Snake(new Point(5,5), new Point(6,8)));
-//        Snakes.add(new Snake(new Point(0,1), new Point(3,8)));
-//        Snakes.add(new Snake(new Point(1,4), new Point(0,6)));
-//        Snakes.add(new Snake(new Point(7,2), new Point(0,9)));
-//        Snakes.add(new Snake(new Point(7,0), new Point(9,3)));
-//        Snakes.add(new Snake(new Point(4,0), new Point(5,3)));
-//        Snakes.add(new Snake(new Point(2,0), new Point(6,6)));
-//        
-//        Ladders.add(new Ladder(new Point(6,9), new Point(7,7)));
-//        Ladders.add(new Ladder(new Point(4,7), new Point(4,6)));
-//        Ladders.add(new Ladder(new Point(1,7), new Point(0,2)));
-//        Ladders.add(new Ladder(new Point(1,2), new Point(1,0)));
-//        Ladders.add(new Ladder(new Point(4,3), new Point(3,1)));
-//        Ladders.add(new Ladder(new Point(5,4), new Point(6,0)));
+        Snakes.add(new Snake(new Point(3,6), new Point(4,9)));
+        Snakes.add(new Snake(new Point(7,6), new Point(8,9)));
+        Snakes.add(new Snake(new Point(5,5), new Point(6,8)));
+        Snakes.add(new Snake(new Point(0,1), new Point(3,8)));
+        Snakes.add(new Snake(new Point(1,4), new Point(0,6)));
+        Snakes.add(new Snake(new Point(7,2), new Point(0,9)));
+        Snakes.add(new Snake(new Point(7,0), new Point(9,3)));
+        Snakes.add(new Snake(new Point(4,0), new Point(5,3)));
+        Snakes.add(new Snake(new Point(2,0), new Point(6,6)));
+        
+        Ladders.add(new Ladder(new Point(6,9), new Point(7,7)));
+        Ladders.add(new Ladder(new Point(4,7), new Point(4,6)));
+        Ladders.add(new Ladder(new Point(1,7), new Point(0,2)));
+        Ladders.add(new Ladder(new Point(1,2), new Point(1,0)));
+        Ladders.add(new Ladder(new Point(4,3), new Point(3,1)));
+        Ladders.add(new Ladder(new Point(5,4), new Point(6,0)));
         Ladders.add(new Ladder(new Point(8,5), new Point(8,0)));
     }
         
+    private void initTableCells() {
+        tcNick.setCellValueFactory(new PropertyValueFactory<>("nickname"));
+        tcColor.setCellValueFactory(new PropertyValueFactory<>("paint"));
+        tcScore.setCellValueFactory(new PropertyValueFactory<>("score"));
+    }
+
+    private void initObservables() {
+        tvPlayers.setItems(Repository.getPlayers());
+    }
+    
     @FXML
     private void btnRollClick(ActionEvent event) throws InterruptedException {
         playRound();
+
     }
     
     private void removeGridPanelChildren(Node... nodes) {
@@ -235,14 +271,13 @@ public class GameController implements Initializable {
     }
 
     private void playRound() {
-        long deplayPerPlayer = 80;
+        long deplayPerPlayer = 800;
         
         blockButton(deplayPerPlayer * 2);
         spinProgress(deplayPerPlayer * 2);
         updatePlayer(player, lblPlayerRolledNumber, lblPlayerScore, Dice.roll(), deplayPerPlayer);
         updatePlayer(computer, lblOpponentRolledNumber, lblOpponentScore, Dice.roll(), deplayPerPlayer * 2);
         
-
     }
 
     private void updatePlayer(Player p, Label lblRolled, Label lblScore, int roll, long sleep) {
@@ -269,6 +304,7 @@ public class GameController implements Initializable {
                     removeGridPanelChildren(p.getFigure());
                     gpGrid.add(p.getFigure(),p.getLocation().x,p.getLocation().y);
                     setScore(p, lblScore);
+                    tvPlayers.refresh();
                     checkWin();
                 });
             }
@@ -276,13 +312,24 @@ public class GameController implements Initializable {
     }
 
     private void clearGame() {
+        
+        // Clear the player data
         player.reset();
         computer.reset();
+        tvPlayers.refresh();
+
+        // Clear the lable text
         lblPlayerRolledNumber.setText("-");
         lblOpponentRolledNumber.setText("-");
+        lblPlayerScore.setText("0");
+        lblOpponentScore.setText("0");
+
+        // Reset grid
         removeGridPanelChildren(cP1, cP2);
         gpGrid.add(cP1,player.getLocation().x,player.getLocation().y);
         gpGrid.add(cP2,computer.getLocation().x,computer.getLocation().y);
+        
+        // Reset action button text
         btnRoll.setText("Roll");
     }
 
@@ -325,4 +372,18 @@ public class GameController implements Initializable {
             }
         }.start();
     }
+
+    @FXML
+    private void miResetClick(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("You are about to reset your progress!");
+
+        alert.setContentText("Really want a fresh start?");
+        if (alert.showAndWait().get() == ButtonType.OK){
+            clearGame(); 
+        }
+    }
+
+
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="180.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.controllers.GameSetupController">
+   <children>
+      <VBox prefHeight="180.0" prefWidth="600.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="140.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label text="Nickname: " />
+                        <TextField fx:id="tfNickname">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </TextField>
+                        <Label text="Color:">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <RadioButton fx:id="rbBlue" mnemonicParsing="false" selected="true" text="Blue" textFill="#4822f2">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="tgColors" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="rbGreen" mnemonicParsing="false" text="Green" textFill="#44cd26" toggleGroup="$tgColors" />
+                        <RadioButton fx:id="rbRed" mnemonicParsing="false" text="Red" textFill="#bf2d01" toggleGroup="$tgColors" />
+                        <RadioButton fx:id="rbYellow" mnemonicParsing="false" text="Yellow" textFill="#ebe83f" toggleGroup="$tgColors" />
+                     </children>
+                     <padding>
+                        <Insets left="20.0" right="20.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="140.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label text="Play vs" />
+                        <ComboBox fx:id="cbPlayerCount" prefHeight="25.0" prefWidth="50.0" />
+                        <Label text="players" />
+                     </children>
+                     <padding>
+                        <Insets left="20.0" right="20.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <Separator prefWidth="200.0" />
+            <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="600.0">
+              <items>
+                <Button fx:id="btnPlay" mnemonicParsing="false" onAction="#btnPlayClick" text="Play" translateX="10.0" />
+              </items>
+            </ToolBar>
+         </children>
+      </VBox>
+      <TextField layoutX="-316.0" layoutY="-130.0" />
+   </children>
+</AnchorPane>

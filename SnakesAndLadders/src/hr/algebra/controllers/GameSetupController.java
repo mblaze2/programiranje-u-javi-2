@@ -15,6 +15,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 /**
@@ -22,15 +26,27 @@ import javafx.stage.Stage;
  *
  * @author Marijo
  */
-public class MenuController implements Initializable {
+public class GameSetupController implements Initializable {
 
     @FXML
-    private Button btnSingleplayer;
+    private TextField tfNickname;
     @FXML
-    private Button btnQuit;
+    private RadioButton rbBlue;
+    @FXML
+    private ToggleGroup tgColors;
+    @FXML
+    private RadioButton rbGreen;
+    @FXML
+    private RadioButton rbRed;
+    @FXML
+    private RadioButton rbYellow;
+    @FXML
+    private ComboBox<?> cbPlayerCount;
+    @FXML
+    private Button btnPlay;
 
     /**
-     * Initialises the controller class.
+     * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -38,24 +54,18 @@ public class MenuController implements Initializable {
     }    
 
     @FXML
-    private void btnQuitClick(ActionEvent event) {
-        Stage stage = (Stage) btnQuit.getScene().getWindow();
-        stage.close();
-    }
-
-    @FXML
-    private void btnSingleplayerClick(ActionEvent event) throws IOException {
+    private void btnPlayClick(ActionEvent event) throws IOException {
         
         // Close the menu
-        Stage menuStage = (Stage) btnSingleplayer.getScene().getWindow();
+        Stage menuStage = (Stage) btnPlay.getScene().getWindow();
         menuStage.close();
         
         // Open the game
-        Parent root = FXMLLoader.load(getClass().getResource("/hr/algebra/view/GameSetup.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/hr/algebra/view/Game.fxml"));
         Stage stage = new Stage();
-        stage.setTitle("Configure game");
+        stage.setTitle("Snakes And Ladders");
         // Adjust the height for non-resizable window 600 - 10 = 590
-        stage.setScene(new Scene(root, 590, 170));
+        stage.setScene(new Scene(root, 790, 590));
         stage.setResizable(false);
         stage.show();
     }
