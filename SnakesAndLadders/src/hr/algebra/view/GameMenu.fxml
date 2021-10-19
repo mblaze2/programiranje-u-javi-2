@@ -2,12 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -16,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="180.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.controllers.GameSetupController">
+<AnchorPane id="AnchorPane" prefHeight="180.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.controllers.GameMenuController">
    <children>
       <VBox prefHeight="180.0" prefWidth="600.0">
          <children>
@@ -53,22 +52,21 @@
                               <Insets />
                            </HBox.margin>
                         </TextField>
-                        <Label text="Color:" />
-                        <RadioButton fx:id="rbBlue" mnemonicParsing="false" selected="true" text="Blue" textFill="#4822f2">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="tgColors" />
-                           </toggleGroup>
-                        </RadioButton>
-                        <RadioButton fx:id="rbGreen" mnemonicParsing="false" text="Green" textFill="#44cd26" toggleGroup="$tgColors" />
-                        <RadioButton fx:id="rbRed" mnemonicParsing="false" text="Red" textFill="#bf2d01" toggleGroup="$tgColors" />
-                        <RadioButton fx:id="rbYellow" mnemonicParsing="false" text="Yellow" textFill="#ebe83f" toggleGroup="$tgColors" />
+                        <Label text="Color:">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin></Label>
+                        <ColorPicker fx:id="cpColor" prefHeight="25.0" prefWidth="222.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
                         <TextField fx:id="tfPlayers" onKeyReleased="#handlePlayButtonReleased" />
-                        <Label text="players" />
-                        <Slider fx:id="slPlayers" max="10.0" min="1.0" prefHeight="14.0" prefWidth="220.0" />
+                        <Label text="players">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin></Label>
+                        <Slider fx:id="slPlayers" max="40.0" min="1.0" prefHeight="14.0" prefWidth="220.0" />
                      </children>
                   </HBox>
                </children>

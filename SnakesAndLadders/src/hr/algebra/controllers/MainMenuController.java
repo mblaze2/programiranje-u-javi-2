@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  *
  * @author Marijo
  */
-public class MenuController implements Initializable {
+public class MainMenuController implements Initializable {
 
     @FXML
     private Button btnSingleplayer;
@@ -35,7 +35,7 @@ public class MenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void btnQuitClick(ActionEvent event) {
@@ -45,19 +45,19 @@ public class MenuController implements Initializable {
 
     @FXML
     private void btnSingleplayerClick(ActionEvent event) throws IOException {
-        
+
         // Close the menu
         Stage menuStage = (Stage) btnSingleplayer.getScene().getWindow();
         menuStage.close();
-        
+
         // Open the game
-        Parent root = FXMLLoader.load(getClass().getResource("/hr/algebra/view/GameSetup.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/hr/algebra/view/GameMenu.fxml"));
         Stage stage = new Stage();
-        stage.setTitle("Configure game");
+        stage.setTitle("Snakes And Ladders - Game Menu");
         // Adjust the height for non-resizable window 600 - 10 = 590
         stage.setScene(new Scene(root, 590, 170));
         stage.setResizable(false);
         stage.show();
     }
-    
+
 }

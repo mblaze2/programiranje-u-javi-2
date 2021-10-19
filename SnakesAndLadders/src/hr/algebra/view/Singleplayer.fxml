@@ -23,18 +23,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.controllers.GameController">
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.controllers.SingleplayerController">
    <children>
-      <HBox prefHeight="600.0" prefWidth="800.0">
+      <HBox prefHeight="800.0" prefWidth="1000.0">
          <children>
-            <Pane prefHeight="400.0" prefWidth="600.0">
+            <Pane prefHeight="800.0" prefWidth="800.0">
                <children>
-                  <ImageView fitHeight="600.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="800.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resources/images/Board.png" />
                      </image>
                   </ImageView>
-                  <GridPane fx:id="gpGrid" alignment="CENTER" prefHeight="600.0" prefWidth="600.0">
+                  <GridPane fx:id="gpGrid" alignment="CENTER" prefHeight="800.0" prefWidth="800.0">
                     <columnConstraints>
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -62,7 +62,7 @@
                   </GridPane>
                </children>
             </Pane>
-            <BorderPane maxWidth="200.0" minWidth="200.0" prefHeight="600.0" prefWidth="200.0">
+            <BorderPane maxWidth="200.0" minWidth="200.0" prefHeight="800.0" prefWidth="200.0">
                <center>
                   <VBox alignment="CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
@@ -71,7 +71,10 @@
                               <Font name="System Bold" size="34.0" />
                            </font>
                         </Label>
-                        <ProgressIndicator fx:id="piRolling" focusTraversable="false" prefHeight="40.0" prefWidth="40.0" visible="false" />
+                        <ProgressIndicator fx:id="piRolling" focusTraversable="false" prefHeight="40.0" prefWidth="40.0" visible="false">
+                           <VBox.margin>
+                              <Insets top="50.0" />
+                           </VBox.margin></ProgressIndicator>
                      </children>
                   </VBox>
                </center>
@@ -105,17 +108,16 @@
                             </Menu>
                           </menus>
                         </MenuBar>
-                        <TabPane prefHeight="380.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane prefHeight="500.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Players">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0">
                                        <children>
-                                          <TableView fx:id="tvPlayers" prefHeight="350.0" prefWidth="200.0">
+                                          <TableView fx:id="tvPlayers" prefHeight="470.0" prefWidth="200.0">
                                             <columns>
                                                 <TableColumn fx:id="tcNick" prefWidth="91.0" text="Nick" />
                                                 <TableColumn fx:id="tcScore" prefWidth="99.0" text="Score" />
-                                              <TableColumn fx:id="tcRoll" prefWidth="91.0" text="Roll" />
                                             </columns>
                                              <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -153,17 +155,17 @@
             </BorderPane>
          </children>
       </HBox>
-      <Label fx:id="lblEndMessage" alignment="CENTER" contentDisplay="CENTER" prefHeight="600.0" prefWidth="600.0" textAlignment="CENTER" wrapText="true">
+      <Label fx:id="lblEndMessage" alignment="CENTER" contentDisplay="CENTER" prefHeight="800.0" prefWidth="800.0" textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="System Bold" size="96.0" />
          </font>
       </Label>
-      <Label fx:id="lblLadderInfo" alignment="CENTER" contentDisplay="CENTER" prefHeight="600.0" prefWidth="600.0" textFill="#50d044">
+      <Label fx:id="lblLadderInfo" alignment="CENTER" contentDisplay="CENTER" prefHeight="800.0" prefWidth="800.0" textFill="#50d044">
          <font>
             <Font name="System Bold" size="96.0" />
          </font>
       </Label>
-      <Label fx:id="lblSnakeInfo" alignment="CENTER" contentDisplay="CENTER" prefHeight="600.0" prefWidth="600.0" textFill="#d94343">
+      <Label fx:id="lblSnakeInfo" alignment="CENTER" contentDisplay="CENTER" prefHeight="800.0" prefWidth="800.0" textFill="#d94343">
          <font>
             <Font name="System Bold" size="96.0" />
          </font>

@@ -5,11 +5,12 @@
  */
 package hr.algebra.controllers;
 
+import hr.algebra.engine.GameEngine;
 import hr.algebra.models.Ladder;
-import hr.algebra.utils.Dice;
 import hr.algebra.models.Player;
 import hr.algebra.models.Snake;
 import hr.algebra.repository.Repository;
+import hr.algebra.utils.Randomiser;
 import java.awt.Point;
 import java.net.URL;
 import java.util.List;
@@ -29,13 +30,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-        
+
 /**
  * FXML Controller class
  *
  * @author Marijo
  */
-public class GameController implements Initializable {
+public class SingleplayerController implements Initializable {
 
     @FXML
     private Button btnRoll;
@@ -52,14 +53,17 @@ public class GameController implements Initializable {
     @FXML
     private TableView<Player> tvPlayers;
     @FXML
-    private TableColumn<Player, String> tcNick, tcRoll, tcScore;
-    
+    private TableColumn<Player, String> tcNick, tcScore;
+
     private final List<Player> Players = Repository.getPlayers();
     private final List<Snake> Snakes = Repository.SNAKES;
     private final List<Ladder> Ladders = Repository.LADDERS;
     
+    private final long ROLL_DELAY = 100;
+
     /**
      * Initialises the controller class.
+     *
      * @param url
      * @param rb
      */
@@ -68,61 +72,31 @@ public class GameController implements Initializable {
         initTableCells();
         initObservables();
         clearGame();
-    }    
-        
+    }
+
     private void initTableCells() {
         tcNick.setCellValueFactory(new PropertyValueFactory<>("nickname"));
         tcScore.setCellValueFactory(new PropertyValueFactory<>("score"));
-        tcRoll.setCellValueFactory(new PropertyValueFactory<>("roll"));
     }
 
     private void initObservables() {
         tvPlayers.setItems(Repository.getPlayers());
     }
-    
+
     @FXML
     private void btnRollClick(ActionEvent event) throws InterruptedException {
         playRound();
     }
-    
+
     private void removeGridPanelChildren(Node... nodes) {
-        for(Node node : nodes) gpGrid.getChildren().remove(node);
-    }
-    
-    private Point getPlayerNextPosition(Point location, int roll) {
-        // Grid size
-        final int rowsCount = gpGrid.getRowConstraints().size();
-        // Check if we move from left to right
-        boolean rollRight = location.y % 2 != 0;
-        // Figure out the next X point based where we move
-        final int nextXPoint = rollRight ? location.x + roll : location.x - roll;
-        if(nextXPoint > (rowsCount - 1) && rollRight)
-        {
-            location.y -= 1;
-            // If we move to the next row we have to add the rest of points
-            location.x = (rowsCount - 1) - (nextXPoint - rowsCount) ;
+        for (Node node : nodes) {
+            gpGrid.getChildren().remove(node);
         }
-        else 
-        {
-            if(nextXPoint < 0){
-                // Make sure we dont overshoot!
-                if(location.y != 0) {
-                    location.y -= 1;
-                    // If we move to the next row we have to add the rest of points
-                    location.x = Math.abs(nextXPoint) - 1;
-                }
-            }else{
-                // Figure out if we move to right or to the left
-                if(rollRight) location.x += roll;
-                else location.x -= roll;
-            }
-        }
-        return location;
     }
 
     private Point validatePosition(Point playerNextPosition) {
-        for (Snake s : Snakes){
-            if(s.getStartLocation().equals(playerNextPosition)){
+        for (Snake s : Snakes) {
+            if (s.getStartLocation().equals(playerNextPosition)) {
                 // Display Info
                 new Thread() {
                     @Override
@@ -131,9 +105,8 @@ public class GameController implements Initializable {
                             lblSnakeInfo.setText("SNAKE!");
                         });
                         try {
-                            Thread.sleep(1200);
-                        }
-                        catch(InterruptedException ex) {
+                            Thread.sleep(ROLL_DELAY);
+                        } catch (InterruptedException ex) {
                             System.out.println(ex.getMessage());
                         }
                         Platform.runLater(() -> {
@@ -141,12 +114,12 @@ public class GameController implements Initializable {
                         });
                     }
                 }.start();
-                return  s.getEndLocation();
+                return s.getEndLocation();
             }
         }
-        
-        for (Ladder l : Ladders){
-            if(l.getStartLocation().equals(playerNextPosition)){
+
+        for (Ladder l : Ladders) {
+            if (l.getStartLocation().equals(playerNextPosition)) {
                 // Display Info
                 new Thread() {
                     @Override
@@ -155,9 +128,8 @@ public class GameController implements Initializable {
                             lblLadderInfo.setText("LADDER!");
                         });
                         try {
-                            Thread.sleep(1200);
-                        }
-                        catch(InterruptedException ex) {
+                            Thread.sleep(ROLL_DELAY);
+                        } catch (InterruptedException ex) {
                             System.out.println(ex.getMessage());
                         }
                         Platform.runLater(() -> {
@@ -172,8 +144,9 @@ public class GameController implements Initializable {
     }
 
     private boolean checkWin() {
-        for (Player player : Players){
-            if(player.getWin()){
+        for (Player player : Players) {
+            if (player.getWin()) {
+                btnRoll.setText("Play Again!");
                 lblEndMessage.setText(player.getNickname() + " Win!");
                 return true;
             }
@@ -182,15 +155,13 @@ public class GameController implements Initializable {
     }
 
     private void playRound() {
-        long deplayPerPlayer = 800;
-        
         int index = 0;
-        blockButton(deplayPerPlayer * Players.size());
-        spinProgress(deplayPerPlayer * Players.size());
-        
-        for (Player player : Players){
-            index ++;
-            updatePlayer(player,  Dice.roll(), deplayPerPlayer * index);
+        blockButton(ROLL_DELAY * Players.size());
+        spinProgress(ROLL_DELAY * Players.size());
+
+        for (Player player : Players) {
+            index++;
+            updatePlayer(player, Randomiser.roll(), ROLL_DELAY * index);
         }
     }
 
@@ -200,22 +171,25 @@ public class GameController implements Initializable {
             public void run() {
                 Platform.runLater(() -> {
                     btnRoll.setDisable(true);
-                    if(checkWin()) clearGame();
+                    if (checkWin()) {
+                        btnRoll.setDisable(false);
+                        clearGame();
+                    }
                 });
                 try {
                     Thread.sleep(sleep);
-                }
-                catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
                 }
                 Platform.runLater(() -> {
-                    p.setLocation((Point)validatePosition(getPlayerNextPosition(p.getLocation(), roll)).clone());
+                    p.setLocation((Point) validatePosition(GameEngine.getNextPoint(p.getLocation(), roll, gpGrid.getRowConstraints().size())).clone());
 
                     // Remove the player form the grid then add it back to new location
                     removeGridPanelChildren(p.getFigure());
                     lblRolled.setTextFill(p.getPaint());
                     lblRolled.setText(String.valueOf(roll));
-                    gpGrid.add(p.getFigure(),p.getLocation().x,p.getLocation().y);
+                    p.setScore(GameEngine.getScoreFromPoint(p.getLocation()));
+                    gpGrid.add(p.getFigure(), p.getLocation().x, p.getLocation().y);
                     tvPlayers.refresh();
                     checkWin();
                 });
@@ -231,12 +205,12 @@ public class GameController implements Initializable {
             removeGridPanelChildren(player.getFigure());
             return player;
         }).forEachOrdered((player) -> {
-            gpGrid.add(player.getFigure(),player.getLocation().x,player.getLocation().y);
+            gpGrid.add(player.getFigure(), player.getLocation().x, player.getLocation().y);
         });
-        
+
         // Clear the player data table
         tvPlayers.refresh();
-        
+
         // Clear the lables
         lblRolled.setText("");
         lblEndMessage.setText("");
@@ -254,8 +228,7 @@ public class GameController implements Initializable {
                 });
                 try {
                     Thread.sleep(sleep);
-                }
-                catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
                 }
                 Platform.runLater(() -> {
@@ -274,8 +247,7 @@ public class GameController implements Initializable {
                 });
                 try {
                     Thread.sleep(sleep);
-                }
-                catch(InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
                 }
                 Platform.runLater(() -> {
@@ -292,8 +264,8 @@ public class GameController implements Initializable {
         alert.setHeaderText("You are about to reset your progress!");
 
         alert.setContentText("Really want a fresh start?");
-        if (alert.showAndWait().get() == ButtonType.OK){
-            clearGame(); 
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            clearGame();
         }
     }
 }
