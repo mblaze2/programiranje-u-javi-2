@@ -12,7 +12,6 @@ import hr.algebra.models.Snake;
 import hr.algebra.repository.Repository;
 import java.awt.Point;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -30,9 +29,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.paint.Color;
         
 /**
  * FXML Controller class
@@ -41,107 +37,42 @@ import javafx.scene.paint.Color;
  */
 public class GameController implements Initializable {
 
-    // Buttons
     @FXML
     private Button btnRoll;
     @FXML
     private GridPane gpGrid;
-    
-    // Shapes
     @FXML
-    private Circle cP1, cP2;
-    
-    // Labels
-    @FXML
-    private Label lblEndMessage;
-    @FXML
-    private Label lblPlayerScore, lblOpponentScore;
-    @FXML
-    private Label lblPlayerRolledNumber, lblOpponentRolledNumber;
+    private Label lblEndMessage, lblRolled;
     @FXML
     private Label lblSnakeInfo, lblLadderInfo;
-    
-    // Menu items
     @FXML
     private MenuItem miReset;
-    
-    // Other
     @FXML
     private ProgressIndicator piRolling;
-    
-    Player player;    
-    Player computer;
-
-    private final List<Snake> Snakes;
-    private final List<Ladder> Ladders;
     @FXML
     private TableView<Player> tvPlayers;
     @FXML
-    private TableColumn<Player, String> tcColor, tcScore, tcNick;
-
-
-    public GameController() {
-        this.Snakes = new ArrayList<>();
-        this.Ladders = new ArrayList<>();
-    }
+    private TableColumn<Player, String> tcNick, tcRoll, tcScore;
+    
+    private final List<Player> Players = Repository.getPlayers();
+    private final List<Snake> Snakes = Repository.SNAKES;
+    private final List<Ladder> Ladders = Repository.LADDERS;
     
     /**
      * Initialises the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initializePlayers();
-        initializeColors();
-        initializeGameBoard();
-        
-        // table
         initTableCells();
         initObservables();
     }    
-
-    private void initializePlayers() {
-        
-        Repository.addPlayer(new Player("You", cP1, Paint.valueOf(Color.CADETBLUE.toString())));
-        Repository.addPlayer(new Player("Computer" ,cP2, Paint.valueOf(Color.CORAL.toString())));
-        
-        
-        this.player = Repository.getPlayer("You");
-        this.computer = Repository.getPlayer("Computer");
-
-    }
-    private void initializeColors() {
-        lblPlayerScore.setTextFill(player.getPaint());
-        lblOpponentScore.setTextFill(computer.getPaint());
-        lblPlayerRolledNumber.setTextFill(player.getPaint());
-        lblOpponentRolledNumber.setTextFill(computer.getPaint());
-    }
-
-    private void initializeGameBoard() {
-        
-        Snakes.add(new Snake(new Point(1,8), new Point(2,9)));        
-        Snakes.add(new Snake(new Point(3,6), new Point(4,9)));
-        Snakes.add(new Snake(new Point(7,6), new Point(8,9)));
-        Snakes.add(new Snake(new Point(5,5), new Point(6,8)));
-        Snakes.add(new Snake(new Point(0,1), new Point(3,8)));
-        Snakes.add(new Snake(new Point(1,4), new Point(0,6)));
-        Snakes.add(new Snake(new Point(7,2), new Point(0,9)));
-        Snakes.add(new Snake(new Point(7,0), new Point(9,3)));
-        Snakes.add(new Snake(new Point(4,0), new Point(5,3)));
-        Snakes.add(new Snake(new Point(2,0), new Point(6,6)));
-        
-        Ladders.add(new Ladder(new Point(6,9), new Point(7,7)));
-        Ladders.add(new Ladder(new Point(4,7), new Point(4,6)));
-        Ladders.add(new Ladder(new Point(1,7), new Point(0,2)));
-        Ladders.add(new Ladder(new Point(1,2), new Point(1,0)));
-        Ladders.add(new Ladder(new Point(4,3), new Point(3,1)));
-        Ladders.add(new Ladder(new Point(5,4), new Point(6,0)));
-        Ladders.add(new Ladder(new Point(8,5), new Point(8,0)));
-    }
         
     private void initTableCells() {
         tcNick.setCellValueFactory(new PropertyValueFactory<>("nickname"));
-        tcColor.setCellValueFactory(new PropertyValueFactory<>("paint"));
         tcScore.setCellValueFactory(new PropertyValueFactory<>("score"));
+        tcRoll.setCellValueFactory(new PropertyValueFactory<>("roll"));
     }
 
     private void initObservables() {
@@ -151,7 +82,6 @@ public class GameController implements Initializable {
     @FXML
     private void btnRollClick(ActionEvent event) throws InterruptedException {
         playRound();
-
     }
     
     private void removeGridPanelChildren(Node... nodes) {
@@ -159,23 +89,17 @@ public class GameController implements Initializable {
     }
     
     private Point getPlayerNextPosition(Player p, int roll) {
-        
         // Grid size
         final int rowsCount = gpGrid.getRowConstraints().size();
-
         // Default starting position
         Point location = p.getLocation();
-        
         // Check if we move from left to right
         boolean rollRight = location.y % 2 != 0;
-        
         // Figure out the next X point based where we move
         final int nextXPoint = rollRight ? location.x + roll : location.x - roll;
-        
         if(nextXPoint > (rowsCount - 1) && rollRight)
         {
             location.y -= 1;
-            
             // If we move to the next row we have to add the rest of points
             location.x = (rowsCount - 1) - (nextXPoint - rowsCount) ;
         }
@@ -185,12 +109,10 @@ public class GameController implements Initializable {
                 // Make sure we dont overshoot!
                 if(location.y != 0) {
                     location.y -= 1;
-
                     // If we move to the next row we have to add the rest of points
                     location.x = Math.abs(nextXPoint) - 1;
                 }
             }else{
-                
                 // Figure out if we move to right or to the left
                 if(rollRight) location.x += roll;
                 else location.x -= roll;
@@ -247,47 +169,38 @@ public class GameController implements Initializable {
                 return l.getEndLocation();
             }
         }
-                
         return playerNextPosition;
     }
 
-
-
     private boolean checkWin() {
-        if(player.getWin()) {
-            btnRoll.setText("Play Again!");
-            lblEndMessage.setText("You Win!");
-            return true;
-        } else if(computer.getWin()) {
-            btnRoll.setText("Play Again!");
-            lblEndMessage.setText("You Lose!");
-            return true;
-        } else lblEndMessage.setText("");
+        for (Player player : Players){
+            if(player.getWin()){
+                lblEndMessage.setText(player.getNickname() + " Win!");
+                return true;
+            }
+        }
         return false;
     }
 
-    private void setScore(Player p, Label lbl) {
-        lbl.setText(String.valueOf(p.getScore()));
-    }
-
     private void playRound() {
-        long deplayPerPlayer = 800;
+        long deplayPerPlayer = 8;
         
-        blockButton(deplayPerPlayer * 2);
-        spinProgress(deplayPerPlayer * 2);
-        updatePlayer(player, lblPlayerRolledNumber, lblPlayerScore, Dice.roll(), deplayPerPlayer);
-        updatePlayer(computer, lblOpponentRolledNumber, lblOpponentScore, Dice.roll(), deplayPerPlayer * 2);
+        int index = 0;
+        blockButton(deplayPerPlayer * Players.size());
+        spinProgress(deplayPerPlayer * Players.size());
         
+        for (Player player : Players){
+            index ++;
+            updatePlayer(player,  Dice.roll(), deplayPerPlayer * index);
+        }
     }
 
-    private void updatePlayer(Player p, Label lblRolled, Label lblScore, int roll, long sleep) {
-        // Run the player
+    private void updatePlayer(Player p, int roll, long sleep) {
         new Thread() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
                     btnRoll.setDisable(true);
-                    lblRolled.setText("-");
                     if(checkWin()) clearGame();
                 });
                 try {
@@ -297,13 +210,13 @@ public class GameController implements Initializable {
                     System.out.println(ex.getMessage());
                 }
                 Platform.runLater(() -> {
-                    lblRolled.setText(String.valueOf(roll));
                     p.setLocation((Point)validatePosition(getPlayerNextPosition(p, roll)).clone());
 
                     // Remove the player form the grid then add it back to new location
                     removeGridPanelChildren(p.getFigure());
+                    lblRolled.setTextFill(p.getPaint());
+                    lblRolled.setText(String.valueOf(roll));
                     gpGrid.add(p.getFigure(),p.getLocation().x,p.getLocation().y);
-                    setScore(p, lblScore);
                     tvPlayers.refresh();
                     checkWin();
                 });
@@ -312,23 +225,23 @@ public class GameController implements Initializable {
     }
 
     private void clearGame() {
+        Players.stream().map((player) -> {
+            player.reset();
+            return player;
+        }).map((player) -> {
+            removeGridPanelChildren(player.getFigure());
+            return player;
+        }).forEachOrdered((player) -> {
+            gpGrid.add(player.getFigure(),player.getLocation().x,player.getLocation().y);
+        });
         
-        // Clear the player data
-        player.reset();
-        computer.reset();
+        // Clear the player data table
         tvPlayers.refresh();
-
-        // Clear the lable text
-        lblPlayerRolledNumber.setText("-");
-        lblOpponentRolledNumber.setText("-");
-        lblPlayerScore.setText("0");
-        lblOpponentScore.setText("0");
-
-        // Reset grid
-        removeGridPanelChildren(cP1, cP2);
-        gpGrid.add(cP1,player.getLocation().x,player.getLocation().y);
-        gpGrid.add(cP2,computer.getLocation().x,computer.getLocation().y);
         
+        // Clear the lables
+        lblRolled.setText("");
+        lblEndMessage.setText("");
+
         // Reset action button text
         btnRoll.setText("Roll");
     }
@@ -384,6 +297,4 @@ public class GameController implements Initializable {
             clearGame(); 
         }
     }
-
-
 }

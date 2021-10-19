@@ -5,6 +5,7 @@
  */
 package hr.algebra.models;
 
+import hr.algebra.utils.Dice;
 import java.awt.Point;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -29,6 +30,7 @@ public class Player {
     private final ObjectProperty<Point> location;
     
     private final IntegerProperty score = new SimpleIntegerProperty(0);
+
     
     public Player(String n, Circle c, Paint p) {
         this.nickname = new SimpleStringProperty(n);

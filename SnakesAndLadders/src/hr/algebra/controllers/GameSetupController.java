@@ -5,6 +5,8 @@
  */
 package hr.algebra.controllers;
 
+import hr.algebra.models.Player;
+import hr.algebra.repository.Repository;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,6 +21,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 /**
@@ -55,6 +60,10 @@ public class GameSetupController implements Initializable {
 
     @FXML
     private void btnPlayClick(ActionEvent event) throws IOException {
+        
+        
+        Repository.addPlayer(new Player(tfNickname.getText().trim(), new Circle(18), Paint.valueOf(Color.CADETBLUE.toString())));
+        Repository.addPlayer(new Player("Computer1" ,new Circle(18), Paint.valueOf(Color.CORAL.toString())));
         
         // Close the menu
         Stage menuStage = (Stage) btnPlay.getScene().getWindow();
