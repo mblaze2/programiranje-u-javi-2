@@ -67,6 +67,7 @@ public class GameController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initTableCells();
         initObservables();
+        clearGame();
     }    
         
     private void initTableCells() {
@@ -88,11 +89,9 @@ public class GameController implements Initializable {
         for(Node node : nodes) gpGrid.getChildren().remove(node);
     }
     
-    private Point getPlayerNextPosition(Player p, int roll) {
+    private Point getPlayerNextPosition(Point location, int roll) {
         // Grid size
         final int rowsCount = gpGrid.getRowConstraints().size();
-        // Default starting position
-        Point location = p.getLocation();
         // Check if we move from left to right
         boolean rollRight = location.y % 2 != 0;
         // Figure out the next X point based where we move
@@ -183,7 +182,7 @@ public class GameController implements Initializable {
     }
 
     private void playRound() {
-        long deplayPerPlayer = 8;
+        long deplayPerPlayer = 800;
         
         int index = 0;
         blockButton(deplayPerPlayer * Players.size());
@@ -210,7 +209,7 @@ public class GameController implements Initializable {
                     System.out.println(ex.getMessage());
                 }
                 Platform.runLater(() -> {
-                    p.setLocation((Point)validatePosition(getPlayerNextPosition(p, roll)).clone());
+                    p.setLocation((Point)validatePosition(getPlayerNextPosition(p.getLocation(), roll)).clone());
 
                     // Remove the player form the grid then add it back to new location
                     removeGridPanelChildren(p.getFigure());
