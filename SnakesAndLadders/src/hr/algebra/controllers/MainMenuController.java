@@ -28,6 +28,8 @@ public class MainMenuController implements Initializable {
     private Button btnSingleplayer;
     @FXML
     private Button btnQuit;
+    @FXML
+    private Button btnSettings;
 
     /**
      * Initialises the controller class.
@@ -56,6 +58,19 @@ public class MainMenuController implements Initializable {
         stage.setTitle("Snakes And Ladders - Game Menu");
         // Adjust the height for non-resizable window 600 - 10 = 590
         stage.setScene(new Scene(root, 590, 170));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void btnSettingsClick(ActionEvent event) throws IOException {
+
+        // Open the settings
+        Parent root = FXMLLoader.load(getClass().getResource("/hr/algebra/view/Settings.fxml"));
+        Stage stage = new Stage();
+        stage.setTitle("Snakes And Ladders - Settings");
+        // Adjust the height for non-resizable window 600 - 10 = 590
+        stage.setScene(new Scene(root, 590, 390));
         stage.setResizable(false);
         stage.show();
     }

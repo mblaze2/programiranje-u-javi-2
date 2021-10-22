@@ -12,7 +12,8 @@ import java.awt.Point;
  * @author Marijo
  */
 public class Snake {
-    private final Point startLocation;        
+
+    private final Point startLocation;
     private final Point endLocation;
 
     public Snake(Point startLocation, Point endLocation) {

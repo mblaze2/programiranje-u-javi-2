@@ -12,7 +12,8 @@ import java.awt.Point;
  * @author Marijo
  */
 public class Ladder {
-    private final Point startLocation;        
+
+    private final Point startLocation;
     private final Point endLocation;
 
     public Ladder(Point startLocation, Point endLocation) {

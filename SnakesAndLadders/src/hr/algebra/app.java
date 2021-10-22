@@ -17,13 +17,13 @@ import javafx.stage.Stage;
  * @author Marijo
  */
 public class app extends Application {
-    
+
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("view/MainMenu.fxml"));
 
         Scene scene = new Scene(root, 600, 400);
-        
+
         stage.setTitle("Snakes And Ladders - Main Menu");
         stage.setScene(scene);
         stage.setResizable(false);
@@ -36,5 +36,5 @@ public class app extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

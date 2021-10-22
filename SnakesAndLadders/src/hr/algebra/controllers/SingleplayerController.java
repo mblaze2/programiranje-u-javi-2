@@ -58,8 +58,8 @@ public class SingleplayerController implements Initializable {
     private final List<Player> Players = Repository.getPlayers();
     private final List<Snake> Snakes = Repository.SNAKES;
     private final List<Ladder> Ladders = Repository.LADDERS;
-    
-    private final long ROLL_DELAY = 100;
+
+    private final long ROLL_DELAY = 800;
 
     /**
      * Initialises the controller class.

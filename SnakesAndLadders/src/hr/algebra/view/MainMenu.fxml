@@ -30,7 +30,7 @@
                </children>
             </HBox>
             <Button disable="true" mnemonicParsing="false" text="Score" />
-            <Button disable="true" mnemonicParsing="false" text="Settings" />
+            <Button fx:id="btnSettings" mnemonicParsing="false" onAction="#btnSettingsClick" text="Settings" />
             <Button fx:id="btnQuit" mnemonicParsing="false" onAction="#btnQuitClick" text="Quit" />
          </children>
       </VBox>

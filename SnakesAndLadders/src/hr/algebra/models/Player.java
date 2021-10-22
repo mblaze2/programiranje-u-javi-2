@@ -69,8 +69,8 @@ public class Player {
     public void setScore(int score) {
         this.score.set(score);
     }
-    
-    public int getScore(){
+
+    public int getScore() {
         return this.score.get();
     }
 

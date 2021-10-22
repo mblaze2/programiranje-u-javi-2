@@ -45,7 +45,7 @@ public class GameMenuController implements Initializable {
     private TextField tfPlayers;
     @FXML
     private Slider slPlayers;
-    
+
     private final int RADIUS = 26;
     @FXML
     private ColorPicker cpColor;

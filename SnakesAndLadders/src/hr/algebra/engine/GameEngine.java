@@ -12,7 +12,7 @@ import java.awt.Point;
  * @author Marijo
  */
 public final class GameEngine {
-    
+
     public static Point getNextPoint(Point oldLocation, int roll, int rowsCount) {
         Point newLocation = new Point(oldLocation);
         // Check if we move from left to right
@@ -42,8 +42,8 @@ public final class GameEngine {
         }
         return newLocation;
     }
-    
-    public static int getScoreFromPoint(Point point){
+
+    public static int getScoreFromPoint(Point point) {
         boolean rollRight = point.y % 2 != 0;
         int columnScore = (9 - point.y) * 10;
         int rowScore = rollRight ? (point.x + 1) : (10 - point.x);
