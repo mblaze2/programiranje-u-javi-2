@@ -8,9 +8,11 @@ package hr.algebra.controllers;
 import hr.algebra.models.Player;
 import hr.algebra.repository.Repository;
 import hr.algebra.utils.Randomiser;
+import hr.algebra.utils.Serialization;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 import javafx.beans.value.ObservableValue;
@@ -45,10 +47,12 @@ public class GameMenuController implements Initializable {
     private TextField tfPlayers;
     @FXML
     private Slider slPlayers;
-
+    
     private final int RADIUS = 26;
     @FXML
     private ColorPicker cpColor;
+    @FXML
+    private Button btnLoadGame;
 
     /**
      * Initializes the controller class.
@@ -118,6 +122,45 @@ public class GameMenuController implements Initializable {
                 || Integer.valueOf(tfPlayers.getText()) < slPlayers.getMin()
                 || Integer.valueOf(tfPlayers.getText()) > slPlayers.getMax()
         );
+    }
+
+    @FXML
+    private void btnLoadGame(ActionEvent event) throws IOException {
+        
+        String FILE_NAME = "players.ser";
+        
+        try {
+            ArrayList<Player> ps = (ArrayList<Player>) Serialization.read(FILE_NAME);
+            System.out.println(ps);
+            
+             // Add player
+            for (int i = 0; i < ps.size(); i++) {
+                Circle ca = new Circle(RADIUS);
+                ca.setId("COM" + String.valueOf(i + 1));
+                Player p = new Player(ps.get(i).getNickname(), ca, Randomiser.paint());
+                p.setLocation(ps.get(i).getLocation());
+                p.setScore(ps.get(i).getScore());
+                Repository.addPlayer(p);
+            }
+
+            // Close the menu
+            Stage menuStage = (Stage) btnPlay.getScene().getWindow();
+            menuStage.close();
+
+            // Open the game
+            Parent root = FXMLLoader.load(getClass().getResource("/hr/algebra/view/Singleplayer.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Snakes And Ladders - Singleplayer");
+            // Adjust the height for non-resizable window 600 - 10 = 590
+            stage.setScene(new Scene(root, 990, 790));
+            stage.setResizable(false);
+            stage.show();
+        
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        
+       
     }
 
 }

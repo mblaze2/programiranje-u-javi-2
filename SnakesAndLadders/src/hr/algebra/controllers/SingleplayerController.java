@@ -11,15 +11,21 @@ import hr.algebra.models.Player;
 import hr.algebra.models.Snake;
 import hr.algebra.repository.Repository;
 import hr.algebra.utils.Randomiser;
+import hr.algebra.utils.Serialization;
 import java.awt.Point;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -30,6 +36,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -59,7 +66,11 @@ public class SingleplayerController implements Initializable {
     private final List<Snake> Snakes = Repository.SNAKES;
     private final List<Ladder> Ladders = Repository.LADDERS;
 
-    private final long ROLL_DELAY = 800;
+    private final long ROLL_DELAY = 1;
+    @FXML
+    private MenuItem miSaveGame;
+    @FXML
+    private MenuItem miQuitGame;
 
     /**
      * Initialises the controller class.
@@ -71,7 +82,7 @@ public class SingleplayerController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initTableCells();
         initObservables();
-        clearGame();
+        displayPlayers();
     }
 
     private void initTableCells() {
@@ -267,5 +278,51 @@ public class SingleplayerController implements Initializable {
         if (alert.showAndWait().get() == ButtonType.OK) {
             clearGame();
         }
+    }
+
+    @FXML
+    private void handleSaveGame(ActionEvent event) {
+        
+        String FILE_NAME = "players.ser";
+        
+        try {
+            Serialization.write(new ArrayList<>(Players), FILE_NAME);
+//            ArrayList<Player> ps = (ArrayList<Player>) Serialization.read(FILE_NAME);
+//            System.out.println(ps);
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Succesfully saved!");
+            alert.setHeaderText(null);
+            alert.setContentText("Game is saved! file: " + FILE_NAME);
+
+            alert.showAndWait();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleQuitGame(ActionEvent event) throws IOException {
+        
+        // Close the Sp
+        Stage sps = (Stage) btnRoll.getScene().getWindow();
+        sps.close();
+        
+        // Open the main menu
+        Parent root = FXMLLoader.load(getClass().getResource("/hr/algebra/view/MainMenu.fxml"));
+        Stage stage = new Stage();
+        stage.setTitle("Snakes And Ladders - Main Menu");
+        // Adjust the height for non-resizable window 600 - 10 = 590
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setResizable(false);
+        stage.show();
+        
+    }
+
+    private void displayPlayers() {
+        Players.stream().forEachOrdered((player) -> {
+            gpGrid.add(player.getFigure(), player.getLocation().x, player.getLocation().y);
+        });
     }
 }

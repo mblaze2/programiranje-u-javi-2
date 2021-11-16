@@ -6,12 +6,10 @@
 package hr.algebra.models;
 
 import java.awt.Point;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -19,64 +17,83 @@ import javafx.scene.shape.Circle;
  *
  * @author Marijo
  */
-public class Player {
+public class Player implements Externalizable {
+    
+    private static final long serialVersionUID = 5L;
 
     private static final Point DEFAULT_LOCATION = new Point(0, 9);
 
-    private final StringProperty nickname;
-    private final IntegerProperty score;
-    private final ObjectProperty<Circle> figure;
-    private final ObjectProperty<Paint> paint;
-    private final ObjectProperty<Point> location;
-
+    private String nickname;
+    private int score;
+    private Circle figure;
+    private Paint paint;
+    private Point location;
+    
+    public Player() {
+    }
+    
     public Player(String n, Circle c, Paint p) {
-        this.nickname = new SimpleStringProperty(n);
-        this.figure = new SimpleObjectProperty<>(c);
-        this.paint = new SimpleObjectProperty<>(p);
-        this.location = new SimpleObjectProperty<>(DEFAULT_LOCATION);
-        this.score = new SimpleIntegerProperty(0);
-        figure.get().setFill(p);
+        this.nickname = n;
+        this.figure = c;
+        this.paint = p;
+        this.location = DEFAULT_LOCATION;
+        this.score = 0;
+        figure.setFill(p);
     }
 
     public String getNickname() {
-        return nickname.get();
+        return nickname;
     }
 
     public Paint getPaint() {
-        return paint.get();
+        return paint;
     }
 
     public Point getLocation() {
-        return location.get();
+        return location;
     }
 
     public Circle getFigure() {
-        return figure.get();
+        return figure;
     }
 
     public boolean getWin() {
-        return location.get().equals(new Point());
+        return location.equals(new Point());
     }
 
     public void reset() {
-        location.set(new Point(0, 9));
+        location = new Point(0, 9);
     }
 
     public void setLocation(Point location) {
-        this.location.set(location);
+        this.location = location;
     }
 
     public void setScore(int score) {
-        this.score.set(score);
+        this.score = score;
     }
 
     public int getScore() {
-        return this.score.get();
+        return this.score;
     }
 
     @Override
     public String toString() {
-        return "Player {" + "location=" + location + '}';
+        return "Player {" + "nickname: " + nickname + ", score: "+ score + ", location: " + location + "}"; 
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeUTF(nickname);
+        out.writeInt(score);
+        out.writeObject(location);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        nickname = in.readUTF();
+        score = in.readInt();
+        location = (Point)in.readObject();
     }
 
 }

@@ -99,6 +99,8 @@
                             <Menu mnemonicParsing="false" text="Game">
                               <items>
                                 <MenuItem fx:id="miReset" mnemonicParsing="false" onAction="#miResetClick" text="Reset" />
+                                    <MenuItem fx:id="miSaveGame" mnemonicParsing="false" onAction="#handleSaveGame" text="Save" />
+                                    <MenuItem fx:id="miQuitGame" mnemonicParsing="false" onAction="#handleQuitGame" text="Quit" />
                               </items>
                             </Menu>
                             <Menu mnemonicParsing="false" text="Help">

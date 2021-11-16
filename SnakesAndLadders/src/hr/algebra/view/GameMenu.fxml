@@ -74,7 +74,12 @@
             <Separator prefWidth="200.0" />
             <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="600.0">
               <items>
-                <Button fx:id="btnPlay" mnemonicParsing="false" onAction="#btnPlayClick" text="Play" translateX="10.0" />
+                  <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="585.0" spacing="450.0">
+                     <children>
+                        <Button fx:id="btnPlay" mnemonicParsing="false" onAction="#btnPlayClick" text="Play" />
+                      <Button fx:id="btnLoadGame" mnemonicParsing="false" onAction="#btnLoadGame" text="Load Game" />
+                     </children>
+                  </HBox>
               </items>
             </ToolBar>
          </children>
