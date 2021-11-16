@@ -287,8 +287,6 @@ public class SingleplayerController implements Initializable {
         
         try {
             Serialization.write(new ArrayList<>(Players), FILE_NAME);
-//            ArrayList<Player> ps = (ArrayList<Player>) Serialization.read(FILE_NAME);
-//            System.out.println(ps);
             
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Succesfully saved!");

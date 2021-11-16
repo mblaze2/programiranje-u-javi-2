@@ -32,7 +32,7 @@ public class Reflection {
     private static void appendPackage(Class<?> clazz, StringBuilder classInfo) {
         classInfo
                 .append(clazz.getPackage())
-                .append("\n\n");
+                .append("<br/>");
     }
 
     private static void appendModifiers(Class<?> clazz, StringBuilder classInfo) {
@@ -65,16 +65,24 @@ public class Reflection {
     }
 
     public static void readClassAndMembersInfo(Class<?> clazz, StringBuilder classAndMembersInfo) {
+        
+        classAndMembersInfo.append("<h2>Class info</h2>");
         readClassInfo(clazz, classAndMembersInfo);
+        
+        classAndMembersInfo.append("<h2>Fields</h2>");
         appendFields(clazz, classAndMembersInfo);
+       
+        classAndMembersInfo.append("<h2>Methods</h2>");
         appendMethods(clazz, classAndMembersInfo);
+        
+        classAndMembersInfo.append("<h2>Class info</h2>");
         appendConstructors(clazz, classAndMembersInfo);
     }
 
     private static void appendFields(Class<?> clazz, StringBuilder classAndMembersInfo) {
         //Field[] fields = clazz.getFields();
         Field[] fields = clazz.getDeclaredFields();
-        classAndMembersInfo.append("</br></br>");
+        classAndMembersInfo.append("</br>");
         classAndMembersInfo.append(
                 Arrays.stream(fields)
                         .map(Objects::toString)
@@ -85,7 +93,7 @@ public class Reflection {
     private static void appendMethods(Class<?> clazz, StringBuilder classAndMembersInfo) {
         Method[] methods = clazz.getDeclaredMethods();
         for (Method method : methods) {
-            classAndMembersInfo.append("</br></br>");
+            classAndMembersInfo.append("</br>");
             appendAnnotations(method, classAndMembersInfo);
             classAndMembersInfo
                     .append("</br>")
@@ -128,7 +136,7 @@ public class Reflection {
     private static void appendConstructors(Class<?> clazz, StringBuilder classAndMembersInfo) {
         Constructor[] constructors = clazz.getDeclaredConstructors();
         for (Constructor constructor : constructors) {
-            classAndMembersInfo.append("</br></br>");
+            classAndMembersInfo.append("</br>");
             appendAnnotations(constructor, classAndMembersInfo);
             classAndMembersInfo
                     .append("</br>")

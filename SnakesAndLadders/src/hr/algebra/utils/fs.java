@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * @author Marijo
  */
 public class fs {
-    public static void main(String[] args) throws IOException {
+    public static String build() throws IOException {
         
         StringBuilder htmlBuilder = new StringBuilder();
         
@@ -40,23 +40,19 @@ public class fs {
                             filename = filename.substring(5, filename.length());
                             System.out.println(filename);
                             Class c = Class.forName(filename);
-                            htmlBuilder.append("<h1>File: ");
+                            htmlBuilder.append("<h1>Class - ");
                             htmlBuilder.append(it.getFileName());
                             htmlBuilder.append("</h1>");
-                            htmlBuilder.append(System.lineSeparator());
                             Reflection.readClassAndMembersInfo( c, htmlBuilder);
                         } catch (ClassNotFoundException ex) {
                             Logger.getLogger(fs.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 });
+        
         htmlBuilder.append("</body>\n");
         htmlBuilder.append("</html>\n");
-          
-        System.out.println(htmlBuilder);
         
-        Writer.write(htmlBuilder.toString());
-
+        return htmlBuilder.toString();
     }
-    
 }
